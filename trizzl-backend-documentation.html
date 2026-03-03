@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trizzl — Complete Backend Engineering Documentation v1.0</title>
+<style>
+:root{--p:#7C3AED;--p2:#5B21B6;--a:#10B981;--w:#F59E0B;--d:#EF4444;--bg:#070711;--s1:#0F0F1F;--s2:#161628;--s3:#1E1E35;--s4:#252545;--bd:#2D2D55;--t:#E8E8FA;--t2:#B8B8D8;--t3:#8080AA;--code:#0A0A1E;--r:12px;--r2:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t);line-height:1.75;font-size:15px}
+
+/* ── SIDEBAR ── */
+#sb{position:fixed;left:0;top:0;bottom:0;width:268px;background:var(--s1);border-right:1px solid var(--bd);overflow-y:auto;z-index:200;display:flex;flex-direction:column}
+#sb::-webkit-scrollbar{width:4px}
+#sb::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.sb-logo{padding:22px 20px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.sb-logo-text{font-size:22px;font-weight:900;letter-spacing:1px;color:var(--p)}
+.sb-logo-text span{color:var(--a)}
+.sb-badge{font-size:10px;background:var(--p);color:white;padding:2px 7px;border-radius:20px;font-weight:700}
+.sb-sec{padding:14px 20px 5px;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--t3);font-weight:800}
+#sb a{display:block;padding:7px 20px 7px 24px;color:var(--t2);text-decoration:none;font-size:13px;border-left:3px solid transparent;transition:.15s all;line-height:1.4}
+#sb a:hover,#sb a.active{background:var(--s2);border-left-color:var(--p);color:var(--a)}
+
+/* ── MAIN ── */
+#main{margin-left:268px;padding:52px 56px 100px;max-width:1120px}
+
+/* ── COVER ── */
+.cover{background:linear-gradient(145deg,#0F0F2E,#1A0A3D,#0A1A2E);border:1px solid var(--bd);border-radius:20px;padding:52px;margin-bottom:56px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(124,58,237,.25),transparent 70%);pointer-events:none}
+.cover::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:radial-gradient(circle,rgba(16,185,129,.15),transparent 70%);pointer-events:none}
+.cover-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);color:#C4B5FD;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}
+.cover h1{font-size:42px;font-weight:900;background:linear-gradient(135deg,#E8E8FA,#C4B5FD,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;line-height:1.2}
+.cover-sub{color:var(--t3);font-size:17px;margin-bottom:28px}
+.cover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.cover-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px}
+.cover-item-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);font-weight:700;margin-bottom:3px}
+.cover-item-val{font-size:13.5px;font-weight:600;color:var(--t)}
+
+/* ── HEADINGS ── */
+h2{font-size:28px;font-weight:800;color:var(--a);margin:56px 0 18px;padding-bottom:10px;border-bottom:2px solid var(--bd);display:flex;align-items:center;gap:10px}
+h3{font-size:19px;font-weight:700;color:#C4B5FD;margin:32px 0 12px}
+h4{font-size:14px;font-weight:700;color:var(--w);margin:22px 0 8px;text-transform:uppercase;letter-spacing:.8px}
+p{margin-bottom:14px;color:var(--t2);font-size:14.5px}
+
+/* ── CALLOUTS ── */
+.box{border-radius:var(--r2);padding:16px 20px;margin:20px 0;border-left:4px solid;font-size:14px}
+.box strong{display:block;margin-bottom:5px;font-size:13px}
+.info{background:rgba(59,130,246,.1);border-color:#3B82F6}
+.warn{background:rgba(245,158,11,.1);border-color:var(--w)}
+.ok{background:rgba(16,185,129,.1);border-color:var(--a)}
+.bad{background:rgba(239,68,68,.1);border-color:var(--d)}
+.tip{background:rgba(124,58,237,.1);border-color:var(--p)}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;margin:18px 0;border-radius:var(--r);border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--s3);color:var(--a);text-align:left;padding:10px 14px;font-size:11px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
+td{padding:10px 14px;border-top:1px solid var(--bd);vertical-align:top;color:var(--t2)}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── CODE ── */
+pre{background:var(--code);border:1px solid var(--bd);border-radius:var(--r2);padding:20px;overflow-x:auto;font-family:'Cascadia Code','Fira Code','Consolas',monospace;font-size:12.5px;line-height:1.7;margin:16px 0;position:relative}
+pre .lang-tag{position:absolute;top:8px;right:12px;font-size:10px;color:var(--t3);font-family:sans-serif;background:var(--s3);padding:2px 8px;border-radius:4px}
+.kw{color:#FF79C6}
+.fn{color:#50FA7B}
+.str{color:#F1FA8C}
+.cm{color:#6272A4}
+.ty{color:#8BE9FD}
+.nu{color:#BD93F9}
+
+/* ── BADGES ── */
+.b{display:inline-flex;align-items:center;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;gap:4px;white-space:nowrap}
+.b-g{background:rgba(16,185,129,.15);color:#34D399;border:1px solid rgba(16,185,129,.3)}
+.b-b{background:rgba(59,130,246,.15);color:#60A5FA;border:1px solid rgba(59,130,246,.3)}
+.b-p{background:rgba(124,58,237,.15);color:#A78BFA;border:1px solid rgba(124,58,237,.3)}
+.b-o{background:rgba(245,158,11,.15);color:#FCD34D;border:1px solid rgba(245,158,11,.3)}
+.b-r{background:rgba(239,68,68,.15);color:#FCA5A5;border:1px solid rgba(239,68,68,.3)}
+.b-c{background:rgba(20,184,166,.15);color:#2DD4BF;border:1px solid rgba(20,184,166,.3)}
+
+/* ── CARDS ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;margin:22px 0}
+.card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:20px 22px;transition:.2s border-color}
+.card:hover{border-color:var(--p)}
+.card-icon{font-size:30px;margin-bottom:10px}
+.card-name{font-weight:800;font-size:15px;color:var(--t);margin-bottom:4px}
+.card-desc{font-size:12.5px;color:var(--t3);line-height:1.5;margin-bottom:10px}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+
+/* ── ARCHITECTURE DIAGRAM ── */
+.arch{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:32px;margin:24px 0;overflow-x:auto}
+.arch pre{background:transparent;border:none;padding:0;font-size:12px;color:#A9DC76;margin:0}
+
+/* ── PHASE BLOCKS ── */
+.phase{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:24px 26px;margin:16px 0;position:relative;overflow:hidden}
+.phase::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--p)}
+.phase.p2::before{background:var(--a)}
+.phase.p3::before{background:var(--w)}
+.ph-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.ph-num{width:38px;height:38px;border-radius:50%;background:var(--p);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}
+.p2 .ph-num{background:var(--a)}
+.p3 .ph-num{background:var(--w);color:#000}
+.ph-title{font-size:18px;font-weight:800;color:var(--t)}
+.ph-dur{margin-left:auto;font-size:12px;color:var(--w);background:rgba(245,158,11,.12);padding:3px 12px;border-radius:20px;border:1px solid rgba(245,158,11,.3)}
+
+/* ── FLOW ── */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:16px 0}
+.fbox{background:var(--s3);border:1px solid var(--bd);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--t)}
+.farr{color:var(--a);font-size:22px;font-weight:700}
+
+/* ── CHECKLIST ── */
+.chk{list-style:none;padding:0}
+.chk li{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13.5px;color:var(--t2)}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:'☐';color:var(--a);font-size:15px;flex-shrink:0;line-height:1.5}
+
+/* ── DIVIDER ── */
+hr{border:none;border-top:1px solid var(--bd);margin:48px 0}
+
+/* ── TOC NUMBER ── */
+.sec-num{display:inline-flex;width:28px;height:28px;border-radius:6px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--p);flex-shrink:0}
+
+ul{padding-left:22px;margin-bottom:14px}
+li{margin-bottom:6px;font-size:14px;color:var(--t2)}
+li strong{color:var(--t)}
+
+@media(max-width:900px){#sb{display:none}#main{margin-left:0;padding:24px 20px 60px}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<nav id="sb">
+  <div class="sb-logo">
+    <div>
+      <div class="sb-logo-text">TRIZZL<span>.</span></div>
+      <div style="font-size:10px;color:var(--t3);margin-top:2px">Backend Docs v1.0</div>
+    </div>
+    <span class="sb-badge">Go</span>
+  </div>
+
+  <div class="sb-sec">Introduction</div>
+  <a href="#intro">📋 What We're Building</a>
+  <a href="#why-go">⚡ Why Go (Golang)</a>
+  <a href="#stack">🛠 Full Tech Stack</a>
+
+  <div class="sb-sec">Architecture</div>
+  <a href="#arch-overview">🏗 System Architecture</a>
+  <a href="#folder">📁 Project Structure</a>
+  <a href="#comms">🔗 Service Communication</a>
+
+  <div class="sb-sec">Microservices</div>
+  <a href="#ms1">🔐 1. Auth Service</a>
+  <a href="#ms2">👤 2. User & KYC</a>
+  <a href="#ms3">💼 3. Wallet Service</a>
+  <a href="#ms4">💸 4. Payment Service</a>
+  <a href="#ms5">🌍 5. FX & Currency</a>
+  <a href="#ms6">🔔 6. Notification</a>
+  <a href="#ms7">💳 7. Card Service</a>
+  <a href="#ms8">🔒 8. SmartHold</a>
+  <a href="#ms9">💬 9. ChatPay</a>
+  <a href="#ms10">👥 10. Groups</a>
+  <a href="#ms11">🛡 11. Compliance</a>
+  <a href="#ms12">🤖 12. ZYRA AI</a>
+
+  <div class="sb-sec">Integration</div>
+  <a href="#dcbank">🏦 DC Bank API</a>
+  <a href="#gateway">🚪 API Gateway</a>
+  <a href="#database">🗄 Database Design</a>
+  <a href="#queue">📨 Message Queue</a>
+  <a href="#security">🔒 Security</a>
+  <a href="#infra">☁️ Infrastructure</a>
+
+  <div class="sb-sec">Delivery</div>
+  <a href="#phases">📅 Build Phases</a>
+  <a href="#team">👨‍💻 Team & Roles</a>
+  <a href="#checklist">✅ Launch Checklist</a>
+  <a href="#env">⚙️ Env Variables</a>
+</nav>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main id="main">
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="cover-tag">⚡ Engineering Blueprint</div>
+  <h1>Trizzl Backend Architecture<br>& Engineering Documentation</h1>
+  <p class="cover-sub">End-to-End Microservices Design · Go (Golang) · DC Bank API Integration · From Day 1 to Launch</p>
+  <div class="cover-grid">
+    <div class="cover-item"><div class="cover-item-label">Version</div><div class="cover-item-val">1.0 — March 2026</div></div>
+    <div class="cover-item"><div class="cover-item-label">Language</div><div class="cover-item-val">Go (Golang) 1.22</div></div>
+    <div class="cover-item"><div class="cover-item-label">Services</div><div class="cover-item-val">12 Microservices</div></div>
+    <div class="cover-item"><div class="cover-item-label">Banking API</div><div class="cover-item-val">DC Bank API</div></div>
+    <div class="cover-item"><div class="cover-item-label">Compliance</div><div class="cover-item-val">FINTRAC · SOC 2</div></div>
+    <div class="cover-item"><div class="cover-item-label">Cloud</div><div class="cover-item-val">AWS (ECS + RDS)</div></div>
+    <div class="cover-item"><div class="cover-item-label">Build Timeline</div><div class="cover-item-val">28 Weeks (7 months)</div></div>
+    <div class="cover-item"><div class="cover-item-label">Product</div><div class="cover-item-val">Sambifi / Trizzl</div></div>
+  </div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<h2 id="intro"><span class="sec-num">1</span> What We Are Building</h2>
+<p>Trizzl is a <strong>borderless social fintech wallet</strong> that lets people send money, hold multi-currency balances, escrow funds, split bills, chat and pay, use debit cards, and get AI financial guidance. It is designed for the diaspora, immigrants, international students, and anyone living across borders.</p>
+<p>The regulated banking infrastructure is powered by <strong>DC Bank API</strong>, which handles the actual money movement, card issuance, and compliance rails. Trizzl's backend is the orchestration layer that sits on top — handling business logic, user experience, and product features.</p>
+
+<h3>Trizzl's Core Products → Backend Services</h3>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Trizzl Product</th><th>What It Does</th><th>Backend Service</th></tr>
+  <tr><td><strong>TrizzlMe</strong></td><td>Send/receive money by TrizzlTag or QR code</td><td>Payment Service</td></tr>
+  <tr><td><strong>FlyFunds</strong></td><td>International remittance with live FX rates</td><td>Payment + FX Service</td></tr>
+  <tr><td><strong>SmartHold</strong></td><td>Escrow for jobs, services, high-trust transactions</td><td>SmartHold Service</td></tr>
+  <tr><td><strong>FlashWallets</strong></td><td>Named purpose wallets (rent, vacation, savings)</td><td>Wallet Service</td></tr>
+  <tr><td><strong>MoneyVibes</strong></td><td>Group expense splitting and settlement</td><td>Groups Service</td></tr>
+  <tr><td><strong>TrizzlGlobe</strong></td><td>Multi-currency holdings and conversion</td><td>FX & Currency Service</td></tr>
+  <tr><td><strong>CampusRemit</strong></td><td>Tuition and student expense payments</td><td>Payment Service</td></tr>
+  <tr><td><strong>ChatPay</strong></td><td>Messaging with embedded payments</td><td>ChatPay Service</td></tr>
+  <tr><td><strong>ZYRA AI</strong></td><td>AI financial assistant and spending insights</td><td>ZYRA AI Service</td></tr>
+  <tr><td><strong>Cards (Gold/Plat/Black)</strong></td><td>Multi-tier debit cards with rewards</td><td>Card Service</td></tr>
+</table>
+</div>
+
+<!-- ═══ WHY GO ═══ -->
+<h2 id="why-go"><span class="sec-num">2</span> Language Decision: Go (Golang) ✅</h2>
+<p>Go is the right language for Trizzl. Here is a complete comparison against every alternative so you have full clarity on this decision.</p>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Factor</th><th>Go ✅ Recommended</th><th>Node.js/TS</th><th>Python</th><th>Java/Spring</th><th>Rust</th></tr>
+  <tr><td><strong>Performance</strong></td><td><span class="b b-g">Excellent</span></td><td><span class="b b-o">Good</span></td><td><span class="b b-r">Slow</span></td><td><span class="b b-g">Excellent</span></td><td><span class="b b-g">Best</span></td></tr>
+  <tr><td><strong>Concurrency</strong></td><td><span class="b b-g">Built-in goroutines</span></td><td><span class="b b-o">Event loop only</span></td><td><span class="b b-r">Limited (GIL)</span></td><td><span class="b b-o">Threads (heavy)</span></td><td><span class="b b-g">Excellent</span></td></tr>
+  <tr><td><strong>Memory usage</strong></td><td><span class="b b-g">Very low</span></td><td><span class="b b-o">Medium</span></td><td><span class="b b-r">High</span></td><td><span class="b b-r">Very high</span></td><td><span class="b b-g">Lowest</span></td></tr>
+  <tr><td><strong>Compile-time safety</strong></td><td><span class="b b-g">Strong types</span></td><td><span class="b b-o">TS helps</span></td><td><span class="b b-r">Runtime errors</span></td><td><span class="b b-g">Strong</span></td><td><span class="b b-g">Strongest</span></td></tr>
+  <tr><td><strong>Learning curve</strong></td><td><span class="b b-g">Simple syntax</span></td><td><span class="b b-g">Easy</span></td><td><span class="b b-g">Easiest</span></td><td><span class="b b-r">Very complex</span></td><td><span class="b b-r">Very hard</span></td></tr>
+  <tr><td><strong>Hiring engineers</strong></td><td><span class="b b-g">Growing, good talent</span></td><td><span class="b b-g">Very large pool</span></td><td><span class="b b-g">Large pool</span></td><td><span class="b b-o">Large, expensive</span></td><td><span class="b b-r">Very rare</span></td></tr>
+  <tr><td><strong>Docker image size</strong></td><td><span class="b b-g">~10MB</span></td><td><span class="b b-r">~200MB+</span></td><td><span class="b b-r">~300MB+</span></td><td><span class="b b-r">~500MB+</span></td><td><span class="b b-g">~5MB</span></td></tr>
+  <tr><td><strong>Real-time/WebSocket</strong></td><td><span class="b b-g">Excellent</span></td><td><span class="b b-g">Excellent</span></td><td><span class="b b-o">Moderate</span></td><td><span class="b b-o">Complex</span></td><td><span class="b b-g">Excellent</span></td></tr>
+  <tr><td><strong>Used by fintech</strong></td><td><span class="b b-g">Stripe, Uber, Cash App</span></td><td><span class="b b-o">PayPal, LinkedIn</span></td><td><span class="b b-o">Some</span></td><td><span class="b b-o">Banks (legacy)</span></td><td><span class="b b-b">Discord, Mozilla</span></td></tr>
+  <tr><td><strong>Cold start (serverless)</strong></td><td><span class="b b-g">~10ms</span></td><td><span class="b b-o">~100ms</span></td><td><span class="b b-o">~200ms</span></td><td><span class="b b-r">~3000ms</span></td><td><span class="b b-g">~5ms</span></td></tr>
+  <tr><td><strong>Microservices fit</strong></td><td><span class="b b-g">Perfect</span></td><td><span class="b b-g">Good</span></td><td><span class="b b-o">Moderate</span></td><td><span class="b b-o">Heavy</span></td><td><span class="b b-g">Excellent</span></td></tr>
+</table>
+</div>
+
+<div class="box ok">
+  <strong>✅ Final Decision: Go (Golang) 1.22 for all 12 microservices</strong>
+  Go gives Trizzl the performance of a systems language with the simplicity of a scripting language. Goroutines handle thousands of concurrent payment requests with minimal memory. Single binary deployments mean tiny Docker images. This is exactly what Stripe, Uber Payments, and Cash App chose — and it is the right call for a fintech product at Trizzl's ambition level.
+</div>
+
+<h3>Go Key Libraries for Trizzl</h3>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Library / Framework</th><th>Purpose</th><th>Alternative</th></tr>
+  <tr><td><strong>Gin</strong> (github.com/gin-gonic/gin)</td><td>HTTP router and middleware framework</td><td>Fiber, Echo, Chi</td></tr>
+  <tr><td><strong>GORM</strong> (gorm.io/gorm)</td><td>ORM for PostgreSQL</td><td>sqlx, pgx (raw)</td></tr>
+  <tr><td><strong>golang-jwt/jwt</strong></td><td>JWT token generation and validation</td><td>jose2go</td></tr>
+  <tr><td><strong>go-redis/redis</strong></td><td>Redis client</td><td>redigo</td></tr>
+  <tr><td><strong>rabbitmq/amqp091-go</strong></td><td>RabbitMQ message queue client</td><td>aws-sdk-go (SQS)</td></tr>
+  <tr><td><strong>gorilla/websocket</strong></td><td>WebSocket for ChatPay real-time</td><td>nhooyr/websocket</td></tr>
+  <tr><td><strong>aws-sdk-go-v2</strong></td><td>AWS S3, Secrets Manager, SES</td><td>—</td></tr>
+  <tr><td><strong>go-playground/validator</strong></td><td>Request body validation</td><td>ozzo-validation</td></tr>
+  <tr><td><strong>rs/zerolog</strong></td><td>Structured logging (JSON)</td><td>zap, logrus</td></tr>
+  <tr><td><strong>golang-migrate/migrate</strong></td><td>Database migrations</td><td>goose</td></tr>
+  <tr><td><strong>testify</strong></td><td>Unit and integration testing</td><td>go test (stdlib)</td></tr>
+  <tr><td><strong>viper</strong></td><td>Configuration management</td><td>envconfig</td></tr>
+</table>
+</div>
+
+<!-- ═══ TECH STACK ═══ -->
+<h2 id="stack"><span class="sec-num">3</span> Full Technology Stack</h2>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+  <tr><td>Backend Language</td><td><strong>Go 1.22</strong></td><td>All 12 microservices</td></tr>
+  <tr><td>HTTP Framework</td><td><strong>Gin</strong></td><td>REST API routing and middleware</td></tr>
+  <tr><td>API Gateway</td><td><strong>Kong Gateway OSS</strong></td><td>Routing, JWT validation, rate limiting, logging</td></tr>
+  <tr><td>Primary Database</td><td><strong>PostgreSQL 16</strong> (one per service)</td><td>All transactional and financial data</td></tr>
+  <tr><td>Cache / Sessions</td><td><strong>Redis 7</strong></td><td>OTP, JWT denylist, rate limiting, FX rate cache</td></tr>
+  <tr><td>Message Queue</td><td><strong>RabbitMQ 3.13</strong></td><td>Async events between services</td></tr>
+  <tr><td>Real-time</td><td><strong>gorilla/websocket</strong></td><td>ChatPay live messaging</td></tr>
+  <tr><td>File Storage</td><td><strong>AWS S3</strong></td><td>KYC documents, profile photos</td></tr>
+  <tr><td>Containers</td><td><strong>Docker + Docker Compose</strong></td><td>Local dev environment</td></tr>
+  <tr><td>Orchestration</td><td><strong>AWS ECS Fargate</strong></td><td>Production container hosting</td></tr>
+  <tr><td>CI/CD</td><td><strong>GitHub Actions</strong></td><td>Automated test, build, deploy</td></tr>
+  <tr><td>Secrets</td><td><strong>AWS Secrets Manager</strong></td><td>DC Bank API key, DB passwords, JWT keys</td></tr>
+  <tr><td>Monitoring</td><td><strong>Datadog</strong> (or AWS CloudWatch)</td><td>Logs, APM traces, alerts, dashboards</td></tr>
+  <tr><td>ORM</td><td><strong>GORM</strong></td><td>Type-safe PostgreSQL queries</td></tr>
+  <tr><td>Migrations</td><td><strong>golang-migrate</strong></td><td>Database schema versioning</td></tr>
+  <tr><td>SMS / OTP</td><td><strong>Twilio</strong></td><td>SMS OTP, transaction alerts</td></tr>
+  <tr><td>Email</td><td><strong>SendGrid</strong></td><td>KYC emails, receipts, statements</td></tr>
+  <tr><td>Push Notifications</td><td><strong>Firebase FCM</strong></td><td>iOS and Android push alerts</td></tr>
+  <tr><td>FX Rates</td><td><strong>Open Exchange Rates API</strong></td><td>Live exchange rate feeds</td></tr>
+  <tr><td>Load Balancer</td><td><strong>AWS ALB</strong></td><td>Traffic distribution across service instances</td></tr>
+  <tr><td>DNS / CDN</td><td><strong>AWS Route 53 + CloudFront</strong></td><td>Domain routing, API edge caching</td></tr>
+  <tr><td>SSL Certificates</td><td><strong>AWS ACM</strong></td><td>Auto-renewing TLS certificates</td></tr>
+</table>
+</div>
+
+<!-- ═══ ARCHITECTURE ═══ -->
+<h2 id="arch-overview"><span class="sec-num">4</span> System Architecture</h2>
+
+<div class="arch">
+<pre>
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║                              TRIZZL CLIENTS                                         ║
+║            [iOS App]          [Android App]          [Web App]                      ║
+╚════════════════════════════════════╦═══════════════════════════════════════════════╝
+                                     ║  HTTPS / WSS (TLS 1.3)
+                                     ▼
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║                     API GATEWAY  —  Kong Gateway                                    ║
+║   ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   ║
+║   │JWT Validation│  │ Rate Limiting│  │   Routing    │  │ Request/Response Log │   ║
+║   └─────────────┘  └──────────────┘  └──────────────┘  └──────────────────────┘   ║
+╚══╦═════╦═════╦═════╦═════╦═════╦════╦═════╦═════╦═════╦════╦════════════════════╝
+   ║     ║     ║     ║     ║     ║    ║     ║     ║     ║    ║
+   ▼     ▼     ▼     ▼     ▼     ▼    ▼     ▼     ▼     ▼    ▼
+ ┌────┐┌────┐┌──────┐┌───────┐┌────┐┌────┐┌──────┐┌────┐┌──────┐┌──────┐┌────────┐
+ │AUTH││USER││WALLET││PAYMENT││ FX ││CARD││ESCROW││CHAT││GROUPS││NOTIFY││COMPLY  │
+ │3001││3002││ 3003 ││  3004 ││3005││3006││ 3007 ││3008││ 3012 ││ 3009 ││  3011  │
+ └──╦─┘└──╦─┘└──╦───┘└───╦───┘└──╦─┘└──╦─┘└──╦───┘└──╦─┘└──╦───┘└──╦───┘└───╦────┘
+    ║      ║     ║        ║       ║      ║     ║        ║     ║        ║         ║
+    ╚══════╩═════╩════════╩═══════╩══════╩═════╩════════╩═════╩════════╩═════════╝
+                                         ║
+                            ╔════════════╩════════════╗
+                            ║   MESSAGE QUEUE          ║
+                            ║   RabbitMQ / AWS SQS     ║
+                            ║   (Async Event Bus)      ║
+                            ╚════════════╦════════════╝
+                                         ║
+                    ╔════════════════════╬════════════════════╗
+                    ║                   ║                    ║
+                    ▼                   ▼                    ▼
+               ┌─────────┐        ┌──────────┐        ┌──────────┐
+               │ ZYRA AI │        │COMPLIANCE│        │ NOTIFY   │
+               │  :3010  │        │  :3011   │        │  :3009   │
+               │ (Go/gRPC│        │ (Go)     │        │ (Go)     │
+               └─────────┘        └──────────┘        └──────────┘
+
+══════════════════════════════════════════════════════════════════════════════════════
+                            EXTERNAL INTEGRATIONS
+  ┌───────────────┐  ┌──────────────┐  ┌────────────┐  ┌─────────┐  ┌────────────┐
+  │  DC BANK API  │  │ Open Exch.   │  │   Twilio   │  │SendGrid │  │Firebase FCM│
+  │  (Core bank,  │  │ Rates API    │  │   (SMS)    │  │ (Email) │  │  (Push)    │
+  │ KYC, Cards,   │  │ (FX rates)   │  └────────────┘  └─────────┘  └────────────┘
+  │  Compliance)  │  └──────────────┘
+  └───────────────┘
+
+══════════════════════════════════════════════════════════════════════════════════════
+                        DATA LAYER  (Each service = own database)
+  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌───────────┐
+  │Postgres │  │Postgres │  │Postgres │  │Postgres │  │Postgres │  │   Redis   │
+  │ auth_db │  │ user_db │  │wallet_db│  │  pay_db │  │ card_db │  │ (shared   │
+  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘  │  cache)   │
+  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  └───────────┘
+  │Postgres │  │Postgres │  │Postgres │  │Postgres │  │Postgres │
+  │  fx_db  │  │escrow_db│  │ chat_db │  │group_db │  │notify_db│
+  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘
+══════════════════════════════════════════════════════════════════════════════════════
+                              AWS INFRASTRUCTURE
+  ┌────────────┐  ┌────────────┐  ┌─────────────┐  ┌────────────┐  ┌────────────┐
+  │  AWS ALB   │  │  ECS       │  │  RDS Postgres│  │ElastiCache │  │  AWS S3    │
+  │(Load Bal.) │  │  Fargate   │  │  (Multi-AZ)  │  │  (Redis)   │  │ (KYC docs) │
+  └────────────┘  └────────────┘  └─────────────┘  └────────────┘  └────────────┘
+</pre>
+</div>
+
+<div class="box info">
+  <strong>📌 Architecture Pattern: Domain-Driven Microservices</strong>
+  Each of the 12 services owns its own database, its own codebase, and its own deployment. No service ever reads directly from another service's database — data sharing happens only via REST API calls (synchronous) or RabbitMQ events (asynchronous). This is how Stripe, Monzo, and N26 are built.
+</div>
+
+<!-- ═══ PROJECT STRUCTURE ═══ -->
+<h2 id="folder"><span class="sec-num">5</span> Go Project Structure</h2>
+<p>All 12 services live in a single monorepo. Each service is fully independent but shares common packages for logging, config, middleware, and DC Bank client.</p>
+
+<pre>
+<span class="lang-tag">Directory</span>
+trizzl-backend/
+├── services/
+│   ├── auth/                     ← Auth Service
+│   │   ├── cmd/main.go
+│   │   ├── internal/
+│   │   │   ├── handler/          ← HTTP handlers (controllers)
+│   │   │   ├── service/          ← Business logic
+│   │   │   ├── repository/       ← Database queries
+│   │   │   └── model/            ← Structs / domain models
+│   │   ├── migrations/           ← SQL migration files
+│   │   ├── Dockerfile
+│   │   └── go.mod
+│   │
+│   ├── user/                     ← User & KYC Service
+│   ├── wallet/                   ← Wallet Service
+│   ├── payment/                  ← Payment Service
+│   ├── fx/                       ← FX & Currency Service
+│   ├── card/                     ← Card Service
+│   ├── smarthold/                ← Escrow Service
+│   ├── chat/                     ← ChatPay Service
+│   ├── groups/                   ← Groups & MoneyVibes
+│   ├── notification/             ← Notification Service
+│   ├── compliance/               ← Compliance Service
+│   └── zyra/                     ← ZYRA AI Service
+│
+├── pkg/                          ← Shared packages (used by all services)
+│   ├── dcbank/                   ← DC Bank API client (shared)
+│   ├── jwt/                      ← JWT helpers
+│   ├── redis/                    ← Redis client wrapper
+│   ├── logger/                   ← Zerolog structured logger
+│   ├── config/                   ← Viper config loader
+│   ├── validator/                ← Request validation helpers
+│   ├── events/                   ← RabbitMQ event publisher/consumer
+│   ├── middleware/               ← Auth middleware, rate limit, CORS
+│   └── errors/                   ← Standardised error types
+│
+├── infra/
+│   ├── docker-compose.yml        ← Local dev: all 12 services + Postgres + Redis + RabbitMQ
+│   ├── kong/                     ← Kong Gateway config
+│   └── terraform/                ← AWS infrastructure as code
+│
+├── .github/
+│   └── workflows/
+│       ├── test.yml              ← Run tests on every PR
+│       └── deploy.yml            ← Deploy on merge to main
+│
+└── Makefile                      ← make run, make test, make build
+</pre>
+
+<h3>Inside Each Service (Pattern)</h3>
+<pre>
+<span class="lang-tag">Go</span>
+<span class="cm">// Every service follows the same 4-layer architecture:</span>
+
+<span class="cm">// 1. HANDLER (HTTP layer) — receives request, validates, calls service</span>
+<span class="kw">func</span> (<span class="ty">h</span> *Handler) <span class="fn">SendPayment</span>(c *gin.Context) {
+    <span class="kw">var</span> req dto.SendPaymentRequest
+    <span class="kw">if</span> err := c.ShouldBindJSON(&amp;req); err != nil {
+        c.JSON(<span class="nu">400</span>, gin.H{<span class="str">"error"</span>: err.Error()})
+        <span class="kw">return</span>
+    }
+    result, err := h.svc.SendPayment(c.Request.Context(), req)
+    <span class="kw">if</span> err != nil { c.JSON(<span class="nu">500</span>, gin.H{<span class="str">"error"</span>: err.Error()}); <span class="kw">return</span> }
+    c.JSON(<span class="nu">200</span>, result)
+}
+
+<span class="cm">// 2. SERVICE (business logic) — orchestrates, calls DC Bank, calls repository</span>
+<span class="kw">func</span> (<span class="ty">s</span> *PaymentService) <span class="fn">SendPayment</span>(ctx context.Context, req dto.SendPaymentRequest) (*dto.PaymentResult, error) {
+    <span class="cm">// validate balance, call DC Bank, update ledger, publish event</span>
+}
+
+<span class="cm">// 3. REPOSITORY (database) — all SQL/GORM queries live here</span>
+<span class="kw">func</span> (<span class="ty">r</span> *PaymentRepo) <span class="fn">CreateTransaction</span>(ctx context.Context, txn *model.Transaction) error {
+    <span class="kw">return</span> r.db.WithContext(ctx).Create(txn).Error
+}
+
+<span class="cm">// 4. MODEL (domain structs) — pure Go structs, no business logic</span>
+<span class="kw">type</span> <span class="ty">Transaction</span> <span class="kw">struct</span> {
+    ID          string    <span class="str">`gorm:"primaryKey"`</span>
+    SenderID    string    <span class="str">`gorm:"not null"`</span>
+    ReceiverID  string    <span class="str">`gorm:"not null"`</span>
+    Amount      float64   <span class="str">`gorm:"type:numeric(18,4)"`</span>
+    Currency    string    <span class="str">`gorm:"size:3"`</span>
+    Status      string    <span class="str">`gorm:"default:pending"`</span>
+    CreatedAt   time.Time
+}
+</pre>
+
+<!-- ═══ SERVICE COMMUNICATION ═══ -->
+<h2 id="comms"><span class="sec-num">6</span> Service Communication</h2>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Pattern</th><th>When to Use</th><th>Example</th></tr>
+  <tr><td><strong>REST (sync)</strong></td><td>When caller needs an immediate response</td><td>Auth Service validates a token → User Service fetches profile</td></tr>
+  <tr><td><strong>RabbitMQ event (async)</strong></td><td>When caller doesn't need to wait for the result</td><td>Payment completes → Notification Service sends push alert</td></tr>
+  <tr><td><strong>Webhook (inbound)</strong></td><td>DC Bank calls Trizzl with updates</td><td>DC Bank webhook → Payment Service confirms settlement</td></tr>
+</table>
+</div>
+
+<h4>RabbitMQ Event Naming Convention</h4>
+<pre>
+<span class="lang-tag">Convention</span>
+Exchange name: trizzl.events
+Routing key format: {service}.{entity}.{action}
+
+Examples:
+  payment.transaction.completed
+  payment.transaction.failed
+  user.kyc.approved
+  user.kyc.rejected
+  card.transaction.processed
+  escrow.contract.released
+  auth.login.new_device
+</pre>
+
+<hr>
+
+<!-- ═══ SERVICES ═══ -->
+<h2>🧩 The 12 Microservices — Detailed</h2>
+
+<!-- MS1 AUTH -->
+<h2 id="ms1"><span class="sec-num">7</span> Service 1: Auth Service <span class="b b-g" style="margin-left:8px">Phase 1</span></h2>
+<p>Handles everything authentication. Phone/email registration, 6-digit OTP via SMS or email, JWT access tokens (15 min) + refresh tokens (30 days), session management, password reset, biometric token exchange, and new device alerts.</p>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Auth?</th><th>Description</th></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/register</td><td>No</td><td>Register with phone + email + password</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/verify-otp</td><td>No</td><td>Verify 6-digit OTP (phone or email)</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/login</td><td>No</td><td>Login — returns access_token + refresh_token</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/refresh</td><td>Refresh token</td><td>Exchange refresh token for new access token</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/logout</td><td>JWT</td><td>Revoke tokens, end session</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/forgot-password</td><td>No</td><td>Send password reset OTP</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/reset-password</td><td>OTP token</td><td>Set new password</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/auth/biometric</td><td>JWT</td><td>Register biometric credential for mobile</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/auth/devices</td><td>JWT</td><td>List trusted devices</td></tr>
+  <tr><td><span class="b b-r">DELETE</span></td><td>/api/auth/devices/:id</td><td>JWT</td><td>Remove a trusted device</td></tr>
+</table>
+</div>
+
+<h4>Implementation Details</h4>
+<pre>
+<span class="lang-tag">Go</span>
+<span class="cm">// OTP Generation and Storage (Redis, 5-minute TTL)</span>
+<span class="kw">func</span> (<span class="ty">s</span> *AuthService) <span class="fn">SendOTP</span>(ctx context.Context, phone string) error {
+    otp := fmt.Sprintf(<span class="str">"%06d"</span>, rand.Intn(<span class="nu">1000000</span>))
+    key := fmt.Sprintf(<span class="str">"otp:%s"</span>, phone)
+    <span class="cm">// Store in Redis with 5-minute TTL, max 3 attempts</span>
+    err := s.redis.Set(ctx, key, otp, <span class="nu">5</span>*time.Minute).Err()
+    <span class="kw">if</span> err != nil { <span class="kw">return</span> err }
+    <span class="kw">return</span> s.twilio.SendSMS(phone, fmt.Sprintf(<span class="str">"Your Trizzl code: %s"</span>, otp))
+}
+
+<span class="cm">// JWT Token Pair — RS256 asymmetric signing</span>
+<span class="kw">type</span> <span class="ty">TokenPair</span> <span class="kw">struct</span> {
+    AccessToken  string <span class="str">`json:"access_token"`</span>   <span class="cm">// 15-minute JWT</span>
+    RefreshToken string <span class="str">`json:"refresh_token"`</span>  <span class="cm">// 30-day UUID stored in Redis</span>
+    ExpiresIn    int    <span class="str">`json:"expires_in"`</span>     <span class="cm">// 900 (seconds)</span>
+}
+
+<span class="cm">// JWT Claims payload</span>
+<span class="kw">type</span> <span class="ty">Claims</span> <span class="kw">struct</span> {
+    UserID          string   <span class="str">`json:"sub"`</span>
+    Phone           string   <span class="str">`json:"phone"`</span>
+    KYCStatus       string   <span class="str">`json:"kyc_status"`</span>  <span class="cm">// pending|verified|rejected</span>
+    DCBankCustomerID string  <span class="str">`json:"dc_customer_id"`</span>
+    Roles           []string <span class="str">`json:"roles"`</span>
+    jwt.RegisteredClaims
+}
+</pre>
+
+<!-- MS2 USER -->
+<h2 id="ms2"><span class="sec-num">8</span> Service 2: User & KYC Service <span class="b b-g" style="margin-left:8px">Phase 1</span></h2>
+<p>Manages user profiles, the unique TrizzlTag handle system, KYC document collection, DC Bank customer creation, and profile photos in S3.</p>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/users/me</td><td>Get own full profile</td></tr>
+  <tr><td><span class="b b-o">PATCH</span></td><td>/api/users/me</td><td>Update profile (name, avatar, preferences)</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/users/trizzltag</td><td>Claim or change TrizzlTag</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/users/check-tag?tag=</td><td>Check if TrizzlTag is available</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/users/search?tag=</td><td>Find user by TrizzlTag (for payments)</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/users/avatar</td><td>Upload profile photo to S3</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/kyc/initiate</td><td>Start KYC — send data to DC Bank</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/kyc/document</td><td>Upload ID document (stored in S3, ref sent to DC Bank)</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/kyc/status</td><td>Get current KYC status</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/kyc/webhook</td><td>Receive KYC result from DC Bank (internal)</td></tr>
+</table>
+</div>
+
+<h4>KYC Flow with DC Bank</h4>
+<div class="flow">
+  <div class="fbox">User submits ID details</div><div class="farr">→</div>
+  <div class="fbox">Upload doc to S3</div><div class="farr">→</div>
+  <div class="fbox">Create DC Bank customer</div><div class="farr">→</div>
+  <div class="fbox">Submit KYC to DC Bank</div><div class="farr">→</div>
+  <div class="fbox">DC Bank reviews (async)</div><div class="farr">→</div>
+  <div class="fbox">Webhook → Update status</div><div class="farr">→</div>
+  <div class="fbox">Publish event → Notify user</div>
+</div>
+
+<!-- MS3 WALLET -->
+<h2 id="ms3"><span class="sec-num">9</span> Service 3: Wallet Service <span class="b b-g" style="margin-left:8px">Phase 1</span></h2>
+<p>The financial ledger of Trizzl. Manages all user balances, FlashWallet creation, multi-currency accounts, funding (top-up), withdrawals, and complete transaction history.</p>
+
+<div class="box bad">
+  <strong>🚨 CRITICAL RULE: Double-Entry Bookkeeping — Non-Negotiable</strong>
+  Every single balance change MUST create two ledger entries: one DEBIT and one CREDIT. You must never directly UPDATE a balance column. This is the foundation of all regulated financial software. Every dollar in must equal every dollar out when you audit the ledger. Failure to implement this correctly is a compliance and audit disaster.
+</div>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/wallets</td><td>List all wallets for authenticated user</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/wallets</td><td>Create new FlashWallet (name + currency)</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/wallets/:id</td><td>Get wallet details and current balance</td></tr>
+  <tr><td><span class="b b-o">PATCH</span></td><td>/api/wallets/:id</td><td>Rename wallet</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/wallets/:id/fund</td><td>Top up via card or bank (calls DC Bank)</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/wallets/:id/withdraw</td><td>Withdraw to bank account (calls DC Bank)</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/wallets/internal-transfer</td><td>Move funds between own wallets</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/wallets/:id/ledger</td><td>Full ledger history (paginated)</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/wallets/summary</td><td>Total balance across all currencies</td></tr>
+</table>
+</div>
+
+<h4>Database Schema</h4>
+<pre>
+<span class="lang-tag">SQL</span>
+<span class="cm">-- wallets table</span>
+<span class="kw">CREATE TABLE</span> wallets (
+    id              UUID <span class="kw">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+    user_id         UUID <span class="kw">NOT NULL REFERENCES</span> users(id),
+    name            VARCHAR(<span class="nu">100</span>) <span class="kw">NOT NULL DEFAULT</span> <span class="str">'Main Wallet'</span>,
+    currency        CHAR(<span class="nu">3</span>) <span class="kw">NOT NULL</span>,      <span class="cm">-- CAD, USD, NGN, GBP, KES, GHS, ZAR</span>
+    type            VARCHAR(<span class="nu">20</span>) <span class="kw">NOT NULL</span>,  <span class="cm">-- personal | flash | shared | escrow</span>
+    status          VARCHAR(<span class="nu">20</span>) <span class="kw">NOT NULL DEFAULT</span> <span class="str">'active'</span>, <span class="cm">-- active|frozen|closed</span>
+    dc_account_id   VARCHAR(<span class="nu">100</span>),           <span class="cm">-- DC Bank account reference ID</span>
+    created_at      TIMESTAMPTZ <span class="kw">DEFAULT</span> now(),
+    updated_at      TIMESTAMPTZ <span class="kw">DEFAULT</span> now()
+);
+
+<span class="cm">-- ledger_entries table — NEVER skip this, NEVER update balance directly</span>
+<span class="kw">CREATE TABLE</span> ledger_entries (
+    id              UUID <span class="kw">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+    wallet_id       UUID <span class="kw">NOT NULL REFERENCES</span> wallets(id),
+    transaction_id  UUID <span class="kw">NOT NULL</span>,
+    entry_type      VARCHAR(<span class="nu">10</span>) <span class="kw">NOT NULL</span>,  <span class="cm">-- DEBIT | CREDIT</span>
+    amount          NUMERIC(<span class="nu">18</span>,<span class="nu">4</span>) <span class="kw">NOT NULL</span>,
+    currency        CHAR(<span class="nu">3</span>) <span class="kw">NOT NULL</span>,
+    balance_after   NUMERIC(<span class="nu">18</span>,<span class="nu">4</span>) <span class="kw">NOT NULL</span>,
+    description     TEXT,
+    reference       VARCHAR(<span class="nu">200</span>),            <span class="cm">-- DC Bank transaction ref</span>
+    created_at      TIMESTAMPTZ <span class="kw">DEFAULT</span> now()
+);
+<span class="kw">CREATE INDEX</span> idx_ledger_wallet ON ledger_entries(wallet_id, created_at <span class="kw">DESC</span>);
+
+<span class="cm">-- Balance is ALWAYS derived, never stored</span>
+<span class="cm">-- SELECT SUM(CASE WHEN entry_type='CREDIT' THEN amount ELSE -amount END)</span>
+<span class="cm">-- FROM ledger_entries WHERE wallet_id = $1</span>
+</pre>
+
+<!-- MS4 PAYMENT -->
+<h2 id="ms4"><span class="sec-num">10</span> Service 4: Payment Service <span class="b b-g" style="margin-left:8px">Phase 1</span></h2>
+<p>Orchestrates all money movement. TrizzlMe (P2P by TrizzlTag or QR code), FlyFunds (international remittance), CampusRemit (tuition/education payments). Calls DC Bank API for actual fund movement and updates the Wallet Service ledger via RabbitMQ events.</p>
+
+<div class="box bad">
+  <strong>🚨 Idempotency Keys — REQUIRED on every payment endpoint</strong>
+  The client must send a unique UUID (X-Idempotency-Key header) with every payment request. The server stores this key in Redis for 24 hours. If the same key is received again (e.g. network retry), return the original result without processing again. This prevents duplicate charges. This is how Stripe, and every serious payments API works.
+</div>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/send</td><td>Send money by TrizzlTag, phone, or user ID</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/request</td><td>Request money from another user</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/qr/generate</td><td>Generate personal payment QR code</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/qr/pay</td><td>Process payment via scanned QR code</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/remittance</td><td>FlyFunds international transfer</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/campus</td><td>CampusRemit — tuition/housing/student payments</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/payments/history</td><td>Paginated transaction history with filters</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/payments/:id</td><td>Get single transaction details and status</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/payments/webhook</td><td>DC Bank payment status webhooks (internal)</td></tr>
+</table>
+</div>
+
+<h4>P2P Payment Flow (TrizzlMe)</h4>
+<div class="flow">
+  <div class="fbox">1. Client sends with idempotency key</div><div class="farr">→</div>
+  <div class="fbox">2. Check idempotency (Redis)</div><div class="farr">→</div>
+  <div class="fbox">3. Validate TrizzlTag exists</div><div class="farr">→</div>
+  <div class="fbox">4. Check sender balance (Wallet Service)</div><div class="farr">→</div>
+  <div class="fbox">5. Call DC Bank Transfer API</div><div class="farr">→</div>
+  <div class="fbox">6. Write pending TX to DB</div><div class="farr">→</div>
+  <div class="fbox">7. DC Bank webhook confirms</div><div class="farr">→</div>
+  <div class="fbox">8. Debit sender ledger</div><div class="farr">→</div>
+  <div class="fbox">9. Credit receiver ledger</div><div class="farr">→</div>
+  <div class="fbox">10. Publish event → Notify both</div>
+</div>
+
+<pre>
+<span class="lang-tag">Go</span>
+<span class="cm">// Idempotency middleware — must wrap ALL payment handlers</span>
+<span class="kw">func</span> <span class="fn">IdempotencyMiddleware</span>(redis *redis.Client) gin.HandlerFunc {
+    <span class="kw">return func</span>(c *gin.Context) {
+        key := c.GetHeader(<span class="str">"X-Idempotency-Key"</span>)
+        <span class="kw">if</span> key == <span class="str">""</span> {
+            c.JSON(<span class="nu">400</span>, gin.H{<span class="str">"error"</span>: <span class="str">"X-Idempotency-Key header required"</span>})
+            c.Abort(); <span class="kw">return</span>
+        }
+        cacheKey := fmt.Sprintf(<span class="str">"idempotency:%s"</span>, key)
+        cached, err := redis.Get(c, cacheKey).Result()
+        <span class="kw">if</span> err == nil {
+            <span class="cm">// Already processed — return cached response</span>
+            c.JSON(<span class="nu">200</span>, json.RawMessage(cached)); c.Abort(); <span class="kw">return</span>
+        }
+        <span class="cm">// Store result in Redis for 24 hours after processing</span>
+        c.Set(<span class="str">"idempotency_key"</span>, key)
+        c.Next()
+    }
+}
+</pre>
+
+<!-- MS5 FX -->
+<h2 id="ms5"><span class="sec-num">11</span> Service 5: FX & Currency Service <span class="b b-g" style="margin-left:8px">Phase 1</span></h2>
+<p>Powers TrizzlGlobe — live exchange rates, multi-currency conversion, supported currencies list. African currencies (NGN, KES, GHS, ZAR, ETB, XOF) are primary use cases alongside CAD, USD, GBP, EUR.</p>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/fx/rates?from=USD&amp;to=NGN</td><td>Get live exchange rate with Trizzl spread applied</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/fx/rates/bulk</td><td>Get all rates for a base currency</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/fx/convert</td><td>Execute currency conversion</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/fx/currencies</td><td>List all supported currencies with flags/names</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/fx/history</td><td>User's past currency conversions</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/fx/quote</td><td>Get a locked quote (valid 30 seconds)</td></tr>
+</table>
+</div>
+
+<pre>
+<span class="lang-tag">Go</span>
+<span class="cm">// FX Rate fetching with Redis caching (60-second TTL)</span>
+<span class="kw">func</span> (<span class="ty">s</span> *FXService) <span class="fn">GetRate</span>(ctx context.Context, from, to string) (float64, error) {
+    cacheKey := fmt.Sprintf(<span class="str">"fx:rate:%s:%s"</span>, from, to)
+
+    <span class="cm">// 1. Try Redis cache first (60-second TTL)</span>
+    cached, err := s.redis.Get(ctx, cacheKey).Float64()
+    <span class="kw">if</span> err == nil { <span class="kw">return</span> cached, nil }
+
+    <span class="cm">// 2. Fetch from Open Exchange Rates API</span>
+    midRate, err := s.oxrClient.GetRate(from, to)
+    <span class="kw">if</span> err != nil { <span class="kw">return</span> <span class="nu">0</span>, err }
+
+    <span class="cm">// 3. Apply Trizzl FX spread (e.g. 1.5% on conversion)</span>
+    trizzlRate := midRate * (<span class="nu">1</span> - s.config.FXSpread)
+
+    <span class="cm">// 4. Store in cache for 60 seconds</span>
+    s.redis.Set(ctx, cacheKey, trizzlRate, <span class="nu">60</span>*time.Second)
+    <span class="kw">return</span> trizzlRate, nil
+}
+</pre>
+
+<!-- MS6 NOTIFICATION -->
+<h2 id="ms6"><span class="sec-num">12</span> Service 6: Notification Service <span class="b b-g" style="margin-left:8px">Phase 1</span></h2>
+<p>Purely event-driven. Consumes RabbitMQ events from all other services and dispatches push notifications (Firebase FCM), SMS (Twilio), and email (SendGrid). Never called directly via REST by users.</p>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>RabbitMQ Event</th><th>Notification Message</th><th>Channels</th></tr>
+  <tr><td>payment.transaction.completed</td><td>"@john sent you CAD $50"</td><td>Push + in-app</td></tr>
+  <tr><td>payment.transaction.sent</td><td>"You sent CAD $50 to @john"</td><td>Push + in-app</td></tr>
+  <tr><td>payment.transaction.failed</td><td>"Payment failed — funds returned"</td><td>Push + SMS</td></tr>
+  <tr><td>user.kyc.approved</td><td>"Identity verified! You can now send money"</td><td>Push + Email</td></tr>
+  <tr><td>user.kyc.rejected</td><td>"Verification failed — please try again"</td><td>Push + Email</td></tr>
+  <tr><td>escrow.contract.funded</td><td>"SmartHold funded — work can begin"</td><td>Push</td></tr>
+  <tr><td>escrow.contract.released</td><td>"Funds released to your wallet!"</td><td>Push + Email</td></tr>
+  <tr><td>card.transaction.processed</td><td>"Card charged $X at [Merchant]"</td><td>Push + SMS</td></tr>
+  <tr><td>auth.login.new_device</td><td>"New login detected — not you? Secure account"</td><td>Push + Email</td></tr>
+  <tr><td>fx.conversion.completed</td><td>"Converted $100 USD → ₦165,000 NGN"</td><td>Push + in-app</td></tr>
+</table>
+</div>
+
+<!-- MS7 CARD -->
+<h2 id="ms7"><span class="sec-num">13</span> Service 7: Card Service <span class="b b-b" style="margin-left:8px">Phase 2</span></h2>
+<p>Issues and manages Trizzl Gold, Platinum, and Black virtual and physical debit cards using DC Bank Card Issuing API. Handles card controls, spending limits, freeze/unfreeze, and card-linked rewards.</p>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/cards/apply</td><td>Apply for a card (tier: gold/platinum/black)</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/cards</td><td>List all user's cards</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/cards/:id</td><td>Card details with masked PAN</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/cards/:id/pan</td><td>Reveal full PAN (requires 2FA)</td></tr>
+  <tr><td><span class="b b-o">PATCH</span></td><td>/api/cards/:id/freeze</td><td>Instantly freeze card</td></tr>
+  <tr><td><span class="b b-o">PATCH</span></td><td>/api/cards/:id/unfreeze</td><td>Unfreeze card</td></tr>
+  <tr><td><span class="b b-o">PATCH</span></td><td>/api/cards/:id/limits</td><td>Set daily/monthly spending limits</td></tr>
+  <tr><td><span class="b b-o">PATCH</span></td><td>/api/cards/:id/controls</td><td>Enable/disable online, international, contactless</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/cards/:id/transactions</td><td>Card transaction history</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/cards/webhook</td><td>DC Bank card authorization/settlement events</td></tr>
+</table>
+</div>
+
+<!-- MS8 SMARTHOLD -->
+<h2 id="ms8"><span class="sec-num">14</span> Service 8: SmartHold (Escrow) Service <span class="b b-b" style="margin-left:8px">Phase 2</span></h2>
+<p>Manages escrow contracts for SmartHold. Buyer locks funds, seller completes work, buyer approves release. Supports milestone-based release and dispute escalation.</p>
+
+<h4>Contract State Machine</h4>
+<div class="flow">
+  <div class="fbox">DRAFT</div><div class="farr">→</div>
+  <div class="fbox">FUNDED</div><div class="farr">→</div>
+  <div class="fbox">IN_PROGRESS</div><div class="farr">→</div>
+  <div class="fbox">PENDING_RELEASE</div><div class="farr">→</div>
+  <div class="fbox">RELEASED</div>
+</div>
+<div class="flow" style="margin-top:0">
+  <div class="fbox">FUNDED / IN_PROGRESS / PENDING_RELEASE</div><div class="farr">→</div>
+  <div class="fbox">DISPUTED</div><div class="farr">→</div>
+  <div class="fbox">RESOLVED / REFUNDED</div>
+</div>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow</td><td>Create SmartHold contract (buyer creates)</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow/:id/fund</td><td>Buyer funds the escrow</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow/:id/start</td><td>Seller confirms work start</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow/:id/complete</td><td>Seller marks work complete</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow/:id/release</td><td>Buyer approves and releases to seller</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow/:id/dispute</td><td>Either party raises dispute</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/escrow/:id/resolve</td><td>Admin resolves dispute</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/escrow/:id</td><td>Get contract details and current state</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/escrow</td><td>List user's contracts (as buyer or seller)</td></tr>
+</table>
+</div>
+
+<!-- MS9 CHAT -->
+<h2 id="ms9"><span class="sec-num">15</span> Service 9: ChatPay Service <span class="b b-b" style="margin-left:8px">Phase 2</span></h2>
+<p>Real-time chat with embedded payments. Users can message and pay in the same thread. Uses WebSocket (gorilla/websocket) for live messaging. REST for message history and payment initiation.</p>
+
+<h4>REST Endpoints + WebSocket Events</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Type</th><th>Event / Endpoint</th><th>Description</th></tr>
+  <tr><td>REST</td><td>GET /api/chats</td><td>List conversations</td></tr>
+  <tr><td>REST</td><td>GET /api/chats/:id/messages</td><td>Message history (paginated)</td></tr>
+  <tr><td>REST</td><td>POST /api/chats</td><td>Start new conversation</td></tr>
+  <tr><td>REST</td><td>POST /api/chats/:id/pay</td><td>Initiate payment inside a chat thread</td></tr>
+  <tr><td>WS</td><td>GET /ws/chat?token=</td><td>Establish WebSocket connection</td></tr>
+  <tr><td>WS Send</td><td>{"type":"message","content":"..."}</td><td>Send a message</td></tr>
+  <tr><td>WS Receive</td><td>{"type":"message","from":"...","content":"..."}</td><td>Receive message in real-time</td></tr>
+  <tr><td>WS Receive</td><td>{"type":"payment_confirmed","amount":"..."}</td><td>Payment confirmation in thread</td></tr>
+  <tr><td>WS Send</td><td>{"type":"typing","chatId":"..."}</td><td>Typing indicator</td></tr>
+  <tr><td>WS Receive</td><td>{"type":"read_receipt","messageId":"..."}</td><td>Read receipts</td></tr>
+</table>
+</div>
+
+<!-- MS10 GROUPS -->
+<h2 id="ms10"><span class="sec-num">16</span> Service 10: Groups & MoneyVibes <span class="b b-b" style="margin-left:8px">Phase 2</span></h2>
+<p>Group expense management for MoneyVibes. Create groups (trip, rent, dinner), log expenses, auto-calculate who owes what, and trigger TrizzlMe settlements.</p>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/groups</td><td>Create group with name and purpose</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/groups</td><td>List user's groups</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/groups/:id/members</td><td>Invite member by TrizzlTag</td></tr>
+  <tr><td><span class="b b-r">DELETE</span></td><td>/api/groups/:id/members/:userId</td><td>Remove member</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/groups/:id/expenses</td><td>Log expense with split rules (equal/custom/percentage)</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/groups/:id/expenses</td><td>List all group expenses</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/groups/:id/balances</td><td>Who owes what — simplified net balances</td></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/groups/:id/settle</td><td>Trigger TrizzlMe payments to settle up</td></tr>
+</table>
+</div>
+
+<!-- MS11 COMPLIANCE -->
+<h2 id="ms11"><span class="sec-num">17</span> Service 11: Compliance Service <span class="b b-o" style="margin-left:8px">Phase 2 — Critical</span></h2>
+<p>Monitors all transactions for AML compliance, sanctions screening, fraud detection, and FINTRAC (Canada) regulatory reporting. This service runs silently in the background, consuming events from all other services.</p>
+
+<div class="box bad">
+  <strong>🚨 Regulatory Requirement — Cannot Be Skipped</strong>
+  Operating as a money services business in Canada requires FINTRAC registration and compliance. Transactions over CAD $10,000 must be reported. Sanctions screening (OFAC, UN, OSFI) is mandatory. Engage a compliance lawyer BEFORE launch. Violation carries criminal penalties.
+</div>
+
+<h4>Compliance Rules Engine</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Rule</th><th>Threshold / Logic</th><th>Action</th></tr>
+  <tr><td>Large Cash Transaction Report</td><td>Any single transaction ≥ CAD $10,000</td><td>Auto-file LCTR with FINTRAC</td></tr>
+  <tr><td>Suspicious Transaction Report</td><td>Pattern analysis flags unusual activity</td><td>Create STR for compliance officer review</td></tr>
+  <tr><td>Velocity check</td><td>More than 20 transactions in 10 minutes</td><td>Flag + notify compliance + freeze if HIGH risk</td></tr>
+  <tr><td>Sanctions screening</td><td>Every sender and receiver on every transaction</td><td>Block immediately if match found, create alert</td></tr>
+  <tr><td>Structuring detection</td><td>Multiple transactions just below $10k threshold</td><td>Flag for STR review</td></tr>
+  <tr><td>New account monitoring</td><td>Accounts less than 30 days old moving large amounts</td><td>Enhanced monitoring, possible hold</td></tr>
+</table>
+</div>
+
+<!-- MS12 ZYRA AI -->
+<h2 id="ms12"><span class="sec-num">18</span> Service 12: ZYRA AI Service <span class="b b-p" style="margin-left:8px">Phase 3</span></h2>
+<p>ZYRA is Trizzl's private AI financial assistant. Built in Go, calls an LLM API (OpenAI GPT-4o or Anthropic Claude) with context derived from the user's anonymised transaction data. All user financial data stays within Trizzl — only summaries are sent to the LLM.</p>
+
+<h4>REST Endpoints</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="b b-b">POST</span></td><td>/api/zyra/chat</td><td>Send message, receive AI response (streaming)</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/zyra/insights</td><td>AI-generated monthly spending summary</td></tr>
+  <tr><td><span class="b b-g">GET</span></td><td>/api/zyra/history</td><td>ZYRA conversation history</td></tr>
+  <tr><td><span class="b b-r">DELETE</span></td><td>/api/zyra/history</td><td>Clear conversation history</td></tr>
+</table>
+</div>
+
+<hr>
+
+<!-- ═══ DC BANK ═══ -->
+<h2 id="dcbank"><span class="sec-num">19</span> DC Bank API Integration</h2>
+<p>DC Bank is Trizzl's regulated banking partner. Their API handles the regulated money movement, card issuance, and compliance reporting. The shared <code>pkg/dcbank/</code> package wraps all DC Bank calls so every microservice uses the same client.</p>
+
+<div class="box info">
+  <strong>📌 DC Bank Docs Reference</strong>
+  Primary reference: <code>clientdoc.dcbankapi.com</code>. Store the DC Bank API key in AWS Secrets Manager under the key <code>/trizzl/prod/dcbank-api-key</code>. The shared DCBankClient in <code>pkg/dcbank/client.go</code> handles auth headers, retries, and error mapping.
+</div>
+
+<h4>DC Bank API Mapping Per Service</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Trizzl Service</th><th>DC Bank Module Used</th><th>Operations Called</th></tr>
+  <tr><td>User & KYC Service</td><td>Customer Onboarding / KYC</td><td>CreateCustomer, SubmitKYCDocument, GetKYCStatus</td></tr>
+  <tr><td>Wallet Service</td><td>Account Management</td><td>CreateAccount, GetBalance, GetStatement, FundAccount</td></tr>
+  <tr><td>Payment Service</td><td>Payments / Transfers</td><td>CreateTransfer, GetTransferStatus, CancelTransfer</td></tr>
+  <tr><td>FX Service</td><td>FX / Currency</td><td>GetFXRate, CreateFXConversion</td></tr>
+  <tr><td>Card Service</td><td>Card Issuing</td><td>IssueCard, GetCard, FreezeCard, SetSpendingLimit</td></tr>
+  <tr><td>Compliance Service</td><td>Compliance Reporting</td><td>SubmitLCTR, SubmitSTR, GetComplianceAlerts</td></tr>
+</table>
+</div>
+
+<pre>
+<span class="lang-tag">Go — pkg/dcbank/client.go</span>
+<span class="kw">type</span> <span class="ty">Client</span> <span class="kw">struct</span> {
+    baseURL    string
+    apiKey     string
+    httpClient *http.Client
+}
+
+<span class="cm">// CreateTransfer — called by Payment Service</span>
+<span class="kw">func</span> (<span class="ty">c</span> *Client) <span class="fn">CreateTransfer</span>(ctx context.Context, req TransferRequest) (*TransferResponse, error) {
+    body, _ := json.Marshal(req)
+    httpReq, _ := http.NewRequestWithContext(ctx, http.MethodPost,
+        c.baseURL+<span class="str">"/v1/transfers"</span>, bytes.NewBuffer(body))
+    httpReq.Header.Set(<span class="str">"Authorization"</span>, <span class="str">"Bearer "</span>+c.apiKey)
+    httpReq.Header.Set(<span class="str">"Content-Type"</span>, <span class="str">"application/json"</span>)
+    httpReq.Header.Set(<span class="str">"X-Idempotency-Key"</span>, req.IdempotencyKey)
+
+    resp, err := c.httpClient.Do(httpReq)
+    <span class="kw">if</span> err != nil { <span class="kw">return</span> nil, fmt.Errorf(<span class="str">"dcbank transfer: %w"</span>, err) }
+    <span class="kw">defer</span> resp.Body.Close()
+
+    <span class="kw">var</span> result TransferResponse
+    json.NewDecoder(resp.Body).Decode(&amp;result)
+    <span class="kw">return</span> &amp;result, nil
+}
+
+<span class="cm">// Webhook handler — verify signature BEFORE processing</span>
+<span class="kw">func</span> <span class="fn">VerifyDCBankWebhook</span>(secret string, payload []byte, sig string) bool {
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write(payload)
+    expected := hex.EncodeToString(mac.Sum(nil))
+    <span class="kw">return</span> hmac.Equal([]byte(expected), []byte(sig))
+}
+</pre>
+
+<!-- ═══ API GATEWAY ═══ -->
+<h2 id="gateway"><span class="sec-num">20</span> API Gateway — Kong</h2>
+<p>Kong Gateway sits in front of every microservice. Clients never talk to services directly. Kong handles JWT validation, rate limiting, routing, and logging centrally.</p>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Responsibility</th><th>Kong Plugin</th><th>Configuration</th></tr>
+  <tr><td>JWT Validation</td><td>jwt</td><td>RS256, validate on every request, pass user ID to service</td></tr>
+  <tr><td>Rate Limiting</td><td>rate-limiting</td><td>100 req/min general; 5 req/min for /payments/*; 10/hr for /kyc/*</td></tr>
+  <tr><td>Routing</td><td>Built-in router</td><td>/api/auth/* → auth:3001, /api/payments/* → payment:3004, etc.</td></tr>
+  <tr><td>Request Logging</td><td>file-log / http-log</td><td>JSON logs: user_id, path, latency, status, timestamp</td></tr>
+  <tr><td>CORS</td><td>cors</td><td>Allow trizzl.com + mobile app origins</td></tr>
+  <tr><td>IP Restriction</td><td>ip-restriction</td><td>Allowlist DC Bank webhook IPs on /*/webhook endpoints</td></tr>
+  <tr><td>Request ID</td><td>correlation-id</td><td>Add X-Request-ID to every request for tracing</td></tr>
+</table>
+</div>
+
+<!-- ═══ DATABASE ═══ -->
+<h2 id="database"><span class="sec-num">21</span> Database Design Strategy</h2>
+<p>Each microservice has its own dedicated PostgreSQL database. No service ever connects to another service's database. Cross-service data access happens via REST API or event queue only.</p>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Service</th><th>Database Name</th><th>AWS RDS Config</th><th>Key Tables</th></tr>
+  <tr><td>Auth</td><td>auth_db</td><td>db.t3.small, Single-AZ</td><td>users, sessions, devices, otp_attempts</td></tr>
+  <tr><td>User & KYC</td><td>user_db</td><td>db.t3.small, Single-AZ</td><td>profiles, trizzltags, kyc_submissions</td></tr>
+  <tr><td>Wallet</td><td>wallet_db</td><td>db.t3.medium, <strong>Multi-AZ</strong></td><td>wallets, ledger_entries, dc_accounts</td></tr>
+  <tr><td>Payment</td><td>payment_db</td><td>db.t3.medium, <strong>Multi-AZ</strong></td><td>transactions, remittances, qr_codes</td></tr>
+  <tr><td>FX</td><td>fx_db</td><td>db.t3.small, Single-AZ</td><td>conversions, fx_quotes, currencies</td></tr>
+  <tr><td>Card</td><td>card_db</td><td>db.t3.small, <strong>Multi-AZ</strong></td><td>cards, card_transactions, card_controls</td></tr>
+  <tr><td>SmartHold</td><td>escrow_db</td><td>db.t3.small, Single-AZ</td><td>contracts, milestones, disputes</td></tr>
+  <tr><td>Chat</td><td>chat_db</td><td>db.t3.small, Single-AZ</td><td>conversations, messages, chat_payments</td></tr>
+  <tr><td>Groups</td><td>groups_db</td><td>db.t3.small, Single-AZ</td><td>groups, members, expenses, settlements</td></tr>
+  <tr><td>Notification</td><td>notify_db</td><td>db.t3.micro, Single-AZ</td><td>notifications, device_tokens, preferences</td></tr>
+  <tr><td>Compliance</td><td>compliance_db</td><td>db.t3.medium, <strong>Multi-AZ</strong></td><td>risk_events, lctr_reports, str_reports, sanctions_checks</td></tr>
+  <tr><td>ZYRA AI</td><td>zyra_db</td><td>db.t3.micro, Single-AZ</td><td>conversations, messages, insights</td></tr>
+</table>
+</div>
+
+<div class="box ok">
+  <strong>✅ Redis (AWS ElastiCache) — Shared by All Services</strong>
+  Redis stores: OTP codes (TTL 5 min), JWT refresh token denylist, idempotency keys (TTL 24 hr), FX rate cache (TTL 60 sec), rate limiting counters, WebSocket session state. Use ElastiCache r6g.large with cluster mode enabled in production.
+</div>
+
+<!-- ═══ MESSAGE QUEUE ═══ -->
+<h2 id="queue"><span class="sec-num">22</span> Message Queue — RabbitMQ</h2>
+<pre>
+<span class="lang-tag">Go — pkg/events/publisher.go</span>
+<span class="cm">// Publishing an event (e.g., from Payment Service after transfer completes)</span>
+<span class="kw">type</span> <span class="ty">PaymentCompletedEvent</span> <span class="kw">struct</span> {
+    TransactionID string  <span class="str">`json:"transaction_id"`</span>
+    SenderID      string  <span class="str">`json:"sender_id"`</span>
+    ReceiverID    string  <span class="str">`json:"receiver_id"`</span>
+    Amount        float64 <span class="str">`json:"amount"`</span>
+    Currency      string  <span class="str">`json:"currency"`</span>
+    Timestamp     int64   <span class="str">`json:"timestamp"`</span>
+}
+
+<span class="kw">func</span> (<span class="ty">p</span> *Publisher) <span class="fn">PublishPaymentCompleted</span>(ctx context.Context, event PaymentCompletedEvent) error {
+    body, _ := json.Marshal(event)
+    <span class="kw">return</span> p.channel.PublishWithContext(ctx,
+        <span class="str">"trizzl.events"</span>,                <span class="cm">// exchange</span>
+        <span class="str">"payment.transaction.completed"</span>,  <span class="cm">// routing key</span>
+        <span class="kw">false</span>, <span class="kw">false</span>,
+        amqp.Publishing{
+            ContentType:  <span class="str">"application/json"</span>,
+            Body:         body,
+            DeliveryMode: amqp.Persistent,   <span class="cm">// survive RabbitMQ restart</span>
+        })
+}
+
+<span class="cm">// Consumer in Notification Service</span>
+<span class="kw">func</span> (<span class="ty">c</span> *Consumer) <span class="fn">ConsumePaymentCompleted</span>() {
+    msgs, _ := c.channel.Consume(<span class="str">"notify.payment.completed"</span>, <span class="str">""</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, nil)
+    <span class="kw">for</span> msg := <span class="kw">range</span> msgs {
+        <span class="kw">var</span> event PaymentCompletedEvent
+        json.Unmarshal(msg.Body, &amp;event)
+        c.notifySvc.PushToUser(event.ReceiverID, <span class="str">"You received money!"</span>)
+        msg.Ack(<span class="kw">false</span>)  <span class="cm">// Always ACK after successful processing</span>
+    }
+}
+</pre>
+
+<!-- ═══ SECURITY ═══ -->
+<h2 id="security"><span class="sec-num">23</span> Security</h2>
+
+<h4>Authentication & Tokens</h4>
+<ul>
+  <li><strong>JWT signing:</strong> RS256 (asymmetric RSA) — private key signs tokens, public key verifies. Never use HS256 in production.</li>
+  <li><strong>Token TTLs:</strong> Access token 15 minutes, refresh token 30 days with rotation on every use.</li>
+  <li><strong>Token revocation:</strong> Maintain a Redis denylist. On logout, add the token JTI to Redis with TTL matching token expiry.</li>
+  <li><strong>Transaction MFA:</strong> Payments above configurable threshold (e.g. CAD $500) require re-confirmation via OTP or biometric.</li>
+</ul>
+
+<h4>Data Protection</h4>
+<ul>
+  <li><strong>PII encryption at rest:</strong> AES-256-GCM for names, phone numbers, addresses in PostgreSQL.</li>
+  <li><strong>All transit:</strong> TLS 1.3 enforced, TLS 1.0/1.1 disabled at ALB level.</li>
+  <li><strong>Card data:</strong> Trizzl NEVER stores raw PAN, CVV, or full card numbers. Only tokenized references from DC Bank.</li>
+  <li><strong>KYC documents:</strong> Stored in S3 with SSE-S3 server-side encryption. Pre-signed URLs expire in 15 minutes.</li>
+  <li><strong>Database:</strong> AWS RDS encryption at rest enabled (AES-256), VPC private subnet (not publicly accessible).</li>
+</ul>
+
+<h4>API Security</h4>
+<ul>
+  <li><strong>Idempotency keys</strong> on all mutating payment endpoints (required header).</li>
+  <li><strong>Webhook verification</strong> — HMAC-SHA256 signature from DC Bank validated before processing every webhook.</li>
+  <li><strong>IP allowlist</strong> for DC Bank webhook source IPs via Kong ip-restriction plugin.</li>
+  <li><strong>Input validation</strong> with go-playground/validator on every request struct.</li>
+  <li><strong>SQL injection prevention</strong> via GORM parameterized queries — never use raw string concatenation in SQL.</li>
+  <li><strong>Secrets rotation</strong> — AWS Secrets Manager with automatic rotation for DB passwords every 30 days.</li>
+</ul>
+
+<!-- ═══ INFRASTRUCTURE ═══ -->
+<h2 id="infra"><span class="sec-num">24</span> Infrastructure & Deployment</h2>
+
+<h4>AWS Services Used</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>AWS Service</th><th>Purpose</th><th>Config</th></tr>
+  <tr><td>ECS Fargate</td><td>Run all 12 Go service containers</td><td>Auto-scaling 1–10 tasks per service</td></tr>
+  <tr><td>RDS PostgreSQL 16</td><td>12 separate databases</td><td>Multi-AZ for Wallet, Payment, Card, Compliance</td></tr>
+  <tr><td>ElastiCache Redis</td><td>Shared cache/session store</td><td>r6g.large, cluster mode on</td></tr>
+  <tr><td>Application Load Balancer</td><td>Distribute traffic to Kong</td><td>HTTPS listeners, SSL termination</td></tr>
+  <tr><td>ACM (Certificate Manager)</td><td>TLS certificates</td><td>Auto-renewing for *.trizzl.com</td></tr>
+  <tr><td>Route 53</td><td>DNS management</td><td>api.trizzl.com → ALB</td></tr>
+  <tr><td>S3</td><td>KYC documents, profile photos</td><td>Private bucket, SSE-S3 encryption</td></tr>
+  <tr><td>Secrets Manager</td><td>All credentials and API keys</td><td>Auto-rotation enabled for DB passwords</td></tr>
+  <tr><td>CloudWatch / Datadog</td><td>Logs, metrics, APM</td><td>Alerts on error rate, P99 latency, payment failures</td></tr>
+  <tr><td>ECR (Container Registry)</td><td>Store Docker images</td><td>One repo per service, image scanning enabled</td></tr>
+  <tr><td>VPC</td><td>Network isolation</td><td>Private subnets for all databases, public for ALB only</td></tr>
+  <tr><td>WAF</td><td>Web Application Firewall</td><td>Block SQL injection, rate abuse at edge</td></tr>
+</table>
+</div>
+
+<h4>Dockerfile (Each Service)</h4>
+<pre>
+<span class="lang-tag">Dockerfile</span>
+<span class="cm"># Multi-stage build — final image is ~12MB</span>
+<span class="kw">FROM</span> golang:1.22-alpine <span class="kw">AS</span> builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=<span class="nu">0</span> GOOS=linux go build -ldflags=<span class="str">"-w -s"</span> -o service ./cmd/main.go
+
+<span class="kw">FROM</span> alpine:3.19
+RUN apk add --no-cache ca-certificates tzdata
+COPY --from=builder /app/service /service
+EXPOSE <span class="nu">8080</span>
+ENTRYPOINT [<span class="str">"/service"</span>]
+</pre>
+
+<h4>GitHub Actions CI/CD Pipeline</h4>
+<pre>
+<span class="lang-tag">GitHub Actions — .github/workflows/deploy.yml</span>
+<span class="cm"># Runs on every merge to main</span>
+steps:
+  1. go test ./...                 ← Run all unit and integration tests
+  2. golangci-lint run             ← Static analysis and linting
+  3. docker build -t {service}     ← Build container image
+  4. docker push to ECR            ← Push to AWS ECR
+  5. aws ecs update-service        ← Rolling deploy to ECS Fargate
+  6. wait for deployment stable    ← Health check before marking success
+  7. notify Slack on failure       ← Alert engineering channel
+</pre>
+
+<hr>
+
+<!-- ═══ BUILD PHASES ═══ -->
+<h2 id="phases"><span class="sec-num">25</span> Build Phases — Week by Week</h2>
+
+<div class="phase">
+  <div class="ph-head">
+    <div class="ph-num">1</div>
+    <div>
+      <div class="ph-title">Phase 1 — Foundation & Core Money Movement</div>
+      <div style="color:var(--t3);font-size:13px">Services: Auth, User/KYC, Wallet, Payment, FX, Notification</div>
+    </div>
+    <div class="ph-dur">Weeks 1–12</div>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Week</th><th>Work Items</th><th>Deliverable</th></tr>
+    <tr><td>1–2</td><td>Monorepo setup, Go modules, Docker Compose (all services + Postgres + Redis + RabbitMQ), Makefile, CI/CD skeleton, shared pkg/ (logger, config, errors, validator), coding standards doc</td><td>Any engineer can clone the repo and run make dev — all services start locally</td></tr>
+    <tr><td>2–3</td><td>Kong Gateway setup, route definitions for all 12 services, JWT plugin, rate limiting plugin, request logging. SSL cert setup on dev domain.</td><td>Gateway running, routes tested via Postman/curl</td></tr>
+    <tr><td>3–5</td><td>Auth Service — register, OTP (Redis + Twilio), JWT RS256 generation, login, refresh, logout, password reset, device tracking, biometric endpoint</td><td>Full auth flow working end-to-end, unit tests written</td></tr>
+    <tr><td>4–6</td><td>User & KYC Service — profiles, TrizzlTag system, DC Bank customer creation, KYC document upload (S3), DC Bank KYC API integration, webhook receiver, kyc status endpoint</td><td>User can register, upload ID, and receive KYC result</td></tr>
+    <tr><td>5–7</td><td>Wallet Service — wallet CRUD, FlashWallet creation, double-entry ledger, fund endpoint (DC Bank account fund), internal transfers, balance endpoint, ledger history</td><td>Wallets created, funded, balance queried correctly</td></tr>
+    <tr><td>6–8</td><td>Payment Service — TrizzlMe P2P send, QR code generate/pay, DC Bank transfer API integration, idempotency middleware, webhook handler, transaction history, FlyFunds remittance endpoint</td><td>End-to-end P2P payment working with DC Bank in sandbox</td></tr>
+    <tr><td>7–9</td><td>FX Service — Open Exchange Rates integration, Redis rate caching, Trizzl spread config, currency conversion endpoint, supported currencies endpoint, TrizzlGlobe conversion</td><td>Multi-currency conversion working with live rates</td></tr>
+    <tr><td>8–10</td><td>Notification Service — RabbitMQ consumer setup, Firebase FCM integration, Twilio SMS integration, SendGrid email integration, all Phase 1 event handlers wired up</td><td>Users receive push/SMS/email for all payment and KYC events</td></tr>
+    <tr><td>10–12</td><td>Integration testing of the full Phase 1 flow, DC Bank sandbox end-to-end tests, bug fixes, performance baseline, security review of auth and payment flows</td><td>Phase 1 sign-off: register → KYC → wallet → send money → notification</td></tr>
+  </table>
+  </div>
+  <div class="box ok"><strong>✅ Phase 1 Exit Criteria</strong>A user can register, verify identity with DC Bank KYC, create a multi-currency FlashWallet, fund it, and send money to another Trizzl user via TrizzlTag — and both parties receive notifications.</div>
+</div>
+
+<div class="phase p2">
+  <div class="ph-head">
+    <div class="ph-num">2</div>
+    <div>
+      <div class="ph-title">Phase 2 — Feature Expansion</div>
+      <div style="color:var(--t3);font-size:13px">Services: Card, SmartHold, ChatPay, Groups, Compliance</div>
+    </div>
+    <div class="ph-dur">Weeks 13–24</div>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Week</th><th>Work Items</th><th>Deliverable</th></tr>
+    <tr><td>13–15</td><td>Card Service — DC Bank card issuing API integration, card application flow, virtual card provisioning, card controls (freeze/unfreeze/limits), card webhook handler, transaction history, Gold/Platinum/Black tier logic</td><td>User can apply for and receive a virtual debit card</td></tr>
+    <tr><td>15–17</td><td>SmartHold Service — escrow contract model, state machine (DRAFT→FUNDED→IN_PROGRESS→PENDING_RELEASE→RELEASED), fund and release flows, dispute creation, admin resolution, CampusRemit escrow sub-flow</td><td>Full escrow flow working: create → fund → complete → release</td></tr>
+    <tr><td>17–19</td><td>ChatPay Service — WebSocket hub (gorilla/websocket), conversation model, real-time message delivery, read receipts, typing indicators, payment-in-chat flow (calls Payment Service), message history REST endpoints</td><td>Two users can chat in real-time and send money inside a conversation</td></tr>
+    <tr><td>19–21</td><td>Groups & MoneyVibes — group creation, member management, expense logging with split rules (equal/custom/percentage), net balance calculation, settlement trigger (calls Payment Service for TrizzlMe payments between members)</td><td>Group can log expenses, see who owes what, and settle up</td></tr>
+    <tr><td>21–23</td><td>Compliance Service — RabbitMQ consumer for all transaction events, AML rules engine, OFAC/UN/OSFI sanctions screening integration, velocity check rules, LCTR auto-filing, risk scoring, DC Bank compliance sync</td><td>All transactions screened in real-time, high-risk events flagged</td></tr>
+    <tr><td>23–24</td><td>Phase 2 integration testing, compliance UAT with test scenarios, CampusRemit end-to-end test, performance testing of WebSocket (ChatPay under load), security review of card and escrow flows</td><td>Phase 2 sign-off</td></tr>
+  </table>
+  </div>
+  <div class="box ok"><strong>✅ Phase 2 Exit Criteria</strong>Cards issued and working, SmartHold contracts fully functional, ChatPay live with embedded payments, groups splitting bills and settling, compliance screening every transaction.</div>
+</div>
+
+<div class="phase p3">
+  <div class="ph-head">
+    <div class="ph-num">3</div>
+    <div>
+      <div class="ph-title">Phase 3 — AI, Admin & Launch Hardening</div>
+      <div style="color:var(--t3);font-size:13px">ZYRA AI, Admin dashboard backend, load testing, security audit, launch</div>
+    </div>
+    <div class="ph-dur">Weeks 25–32</div>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Week</th><th>Work Items</th><th>Deliverable</th></tr>
+    <tr><td>25–27</td><td>ZYRA AI Service — LLM API integration (OpenAI or Anthropic), spending context builder (fetches anonymised transaction summaries from Wallet/Payment), streaming response endpoint, conversation history, monthly insights generation</td><td>ZYRA answers questions about spending, sends insights</td></tr>
+    <tr><td>27–28</td><td>Admin dashboard backend APIs — user search and management, transaction lookup and manual review, compliance report export, customer support override tools, system health dashboard</td><td>Ops team can manage users and transactions</td></tr>
+    <tr><td>28–29</td><td>Advanced analytics — statement export (PDF/CSV), spending category breakdown, monthly/yearly reports, cross-currency portfolio view</td><td>Users can export statements</td></tr>
+    <tr><td>29–30</td><td>Load testing — k6 scripts targeting all critical paths. Goal: 2,000 concurrent users, P99 &lt;500ms on payment endpoints, P99 &lt;200ms on read endpoints. Fix any bottlenecks found.</td><td>Load test report with all targets met</td></tr>
+    <tr><td>30–31</td><td>Third-party penetration test, OWASP Top 10 checklist, fix all critical and high severity findings, final security sign-off</td><td>Pentest report, all critical findings resolved</td></tr>
+    <tr><td>31–32</td><td>DC Bank production credentials switch (sandbox → live), FINTRAC go-live checklist with compliance lawyer, DNS cutover, monitoring dashboards live, on-call runbook written, soft launch</td><td>🚀 Trizzl is live</td></tr>
+  </table>
+  </div>
+</div>
+
+<!-- ═══ TEAM ═══ -->
+<h2 id="team"><span class="sec-num">26</span> Team Structure & Responsibilities</h2>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Role</th><th>Count</th><th>Owns</th><th>Must Know</th></tr>
+  <tr><td><strong>Backend Lead / Architect</strong></td><td>1</td><td>Architecture decisions, DC Bank integration, shared pkg/, code review, security design</td><td>Go, PostgreSQL, fintech patterns, DC Bank API</td></tr>
+  <tr><td><strong>Backend Engineer (Go)</strong></td><td>3–4</td><td>Individual microservices — 2–3 services per engineer</td><td>Go, Gin, GORM, PostgreSQL, RabbitMQ</td></tr>
+  <tr><td><strong>DevOps / Cloud Engineer</strong></td><td>1</td><td>AWS infrastructure (ECS, RDS, ElastiCache), Docker, CI/CD, Kong, monitoring, SSL, VPC</td><td>AWS, Terraform, Docker, GitHub Actions</td></tr>
+  <tr><td><strong>QA Engineer</strong></td><td>1</td><td>Integration test suite, DC Bank sandbox test scripts, load test scripts (k6), regression tests</td><td>API testing, Postman/k6, payment flows</td></tr>
+  <tr><td><strong>Compliance Consultant</strong></td><td>Part-time</td><td>FINTRAC registration, AML rule validation, KYC policy review, go-live sign-off</td><td>Canadian MSB law, FINTRAC reporting, AML</td></tr>
+</table>
+</div>
+
+<div class="box warn">
+  <strong>⚠️ Small Team Strategy (3–4 engineers total)</strong>
+  Assign 2 engineers to Phase 1 core (Auth + Wallet + Payment — these are the foundations). Backend lead owns DC Bank integration and shared packages. Build phases strictly sequentially — do not start Phase 2 until Phase 1 is fully tested and signed off. One person should own DevOps from Week 1 so infrastructure is never a blocker.
+</div>
+
+<h4>Service Ownership Assignment (Suggested)</h4>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Engineer</th><th>Services Owned</th></tr>
+  <tr><td>Backend Lead</td><td>pkg/dcbank (shared), API Gateway config, Wallet Service (ledger is critical), Compliance Service</td></tr>
+  <tr><td>Engineer 1</td><td>Auth Service, User & KYC Service, Notification Service</td></tr>
+  <tr><td>Engineer 2</td><td>Payment Service, FX Service, Card Service</td></tr>
+  <tr><td>Engineer 3</td><td>SmartHold Service, Groups & MoneyVibes, ChatPay Service, ZYRA AI</td></tr>
+  <tr><td>DevOps</td><td>AWS infrastructure, Docker, CI/CD, Kong, monitoring, DB setup</td></tr>
+</table>
+</div>
+
+<!-- ═══ ENV VARIABLES ═══ -->
+<h2 id="env"><span class="sec-num">27</span> Environment Variables Reference</h2>
+<pre>
+<span class="lang-tag">Environment — .env (never commit to git)</span>
+<span class="cm"># ── Shared by all services ──────────────────────────────────────</span>
+APP_ENV=production                     <span class="cm"># local | staging | production</span>
+LOG_LEVEL=info                         <span class="cm"># debug | info | warn | error</span>
+JWT_PRIVATE_KEY_PATH=/secrets/jwt.key  <span class="cm"># RS256 private key</span>
+JWT_PUBLIC_KEY_PATH=/secrets/jwt.pub   <span class="cm"># RS256 public key</span>
+
+<span class="cm"># ── Databases (one per service) ─────────────────────────────────</span>
+AUTH_DB_URL=postgres://user:pass@rds-auth.xxx.rds.amazonaws.com/auth_db
+WALLET_DB_URL=postgres://user:pass@rds-wallet.xxx.rds.amazonaws.com/wallet_db
+PAYMENT_DB_URL=postgres://user:pass@rds-payment.xxx.rds.amazonaws.com/payment_db
+<span class="cm"># ... repeat for all 12 services</span>
+
+<span class="cm"># ── Redis ────────────────────────────────────────────────────────</span>
+REDIS_URL=redis://trizzl-redis.xxx.cache.amazonaws.com:6379
+
+<span class="cm"># ── RabbitMQ ─────────────────────────────────────────────────────</span>
+RABBITMQ_URL=amqp://user:pass@rabbitmq-host:5672/
+
+<span class="cm"># ── DC Bank API ──────────────────────────────────────────────────</span>
+DCBANK_API_URL=https://api.dcbankapi.com
+DCBANK_API_KEY=<span class="str">dcb_live_XXXXXXXXXXXXXXXX</span>        <span class="cm"># From AWS Secrets Manager</span>
+DCBANK_WEBHOOK_SECRET=<span class="str">whsec_XXXXXXXX</span>           <span class="cm"># For HMAC signature verification</span>
+
+<span class="cm"># ── Twilio (SMS/OTP) ─────────────────────────────────────────────</span>
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_FROM_NUMBER=+1XXXXXXXXXX
+
+<span class="cm"># ── SendGrid (Email) ─────────────────────────────────────────────</span>
+SENDGRID_API_KEY=SG.XXXXXXXXXXXXXXXX
+SENDGRID_FROM_EMAIL=noreply@trizzl.com
+
+<span class="cm"># ── Firebase FCM (Push) ──────────────────────────────────────────</span>
+FIREBASE_SERVICE_ACCOUNT_JSON=/secrets/firebase.json
+
+<span class="cm"># ── AWS ──────────────────────────────────────────────────────────</span>
+AWS_REGION=ca-central-1
+AWS_S3_KYC_BUCKET=trizzl-kyc-documents-prod
+AWS_S3_AVATARS_BUCKET=trizzl-profile-photos-prod
+
+<span class="cm"># ── FX Rate API ──────────────────────────────────────────────────</span>
+OXR_APP_ID=xxxxxxxxxxxxxxxxxxxxxxxx
+FX_SPREAD_PERCENT=1.5                           <span class="cm"># Trizzl margin on conversions</span>
+
+<span class="cm"># ── LLM (ZYRA AI) ────────────────────────────────────────────────</span>
+OPENAI_API_KEY=sk-XXXXXXXXXXXXXXXX
+LLM_MODEL=gpt-4o
+</pre>
+
+<!-- ═══ CHECKLIST ═══ -->
+<h2 id="checklist"><span class="sec-num">28</span> Launch Checklist</h2>
+
+<h3>Technical Checklist</h3>
+<ul class="chk">
+  <li>All 12 services containerized and deployed to AWS ECS Fargate</li>
+  <li>Kong API Gateway running with JWT validation, rate limiting, and routing on all routes</li>
+  <li>All databases on AWS RDS PostgreSQL with Multi-AZ on Wallet, Payment, Card, Compliance</li>
+  <li>Redis on AWS ElastiCache (cluster mode)</li>
+  <li>All secrets in AWS Secrets Manager — zero hardcoded credentials in code or environment files</li>
+  <li>Automated database backups enabled with 7-day retention and point-in-time recovery</li>
+  <li>All payment endpoints have idempotency key middleware</li>
+  <li>DC Bank webhook HMAC signature verification implemented on all webhook endpoints</li>
+  <li>IP allowlist for DC Bank webhook source IPs</li>
+  <li>Load test completed — 2,000 concurrent users, P99 payment endpoint &lt;500ms</li>
+  <li>Third-party penetration test completed, all critical and high findings resolved</li>
+  <li>Double-entry ledger verified — audit of ledger_entries confirms every debit has matching credit</li>
+  <li>Card PAN storage audit — confirmed Trizzl never stores raw card numbers</li>
+  <li>All services have health check endpoints (/health) returning 200</li>
+  <li>Monitoring dashboards live in Datadog with alert policies on: error rate &gt;1%, P99 latency &gt;1s, payment failure rate &gt;0.5%</li>
+  <li>GitHub Actions CI/CD pipeline deploying successfully with zero-downtime rolling deploys</li>
+</ul>
+
+<h3>Regulatory Checklist (Canada — FINTRAC)</h3>
+<ul class="chk">
+  <li>FINTRAC MSB (Money Services Business) registration completed and approved</li>
+  <li>AML Compliance Program documented, reviewed by compliance lawyer, signed off by leadership</li>
+  <li>KYC procedure reviewed and approved — identity verification meets FINTRAC requirements</li>
+  <li>LCTR auto-filing tested with DC Bank — transactions over CAD $10,000 file correctly</li>
+  <li>Sanctions screening (OFAC, UN, OSFI) tested with known test cases — blocks confirmed</li>
+  <li>Privacy Policy published on website — complies with PIPEDA (Canada)</li>
+  <li>Terms of Service and User Agreement published and reviewed by lawyer</li>
+  <li>Data residency — Canadian user data stored in AWS ca-central-1 (Canada) region</li>
+  <li>Security Compliance page published (FINTRAC, SOC 2 as shown on trizzl.com)</li>
+</ul>
+
+<h3>Operations Checklist</h3>
+<ul class="chk">
+  <li>On-call rotation defined and calendar set (minimum 2 engineers reachable 24/7)</li>
+  <li>Incident response runbook written: payment failure, database down, DC Bank outage, fraud alert</li>
+  <li>DC Bank support escalation contact and SLA documented for production issues</li>
+  <li>Admin dashboard operational — ops team trained on user management and transaction review</li>
+  <li>Rollback procedure documented and tested — can revert any service to previous version in &lt;5 min</li>
+  <li>Disaster recovery plan written and tested — RTO &lt;1hr, RPO &lt;15min for financial data</li>
+</ul>
+
+<hr>
+
+<div class="box ok" style="padding:22px 26px;font-size:15px">
+  <strong>🚀 Where to Start — Day 1 Action Plan</strong>
+  <ol style="padding-left:20px;margin-top:10px;color:var(--t2)">
+    <li style="margin-bottom:8px">Create the GitHub monorepo: <code>trizzl-backend</code>. Set up the folder structure from Section 5.</li>
+    <li style="margin-bottom:8px">Set up local Docker Compose with PostgreSQL, Redis, RabbitMQ, and Kong.</li>
+    <li style="margin-bottom:8px">Create the <code>pkg/</code> shared packages: logger, config, errors, validator, dcbank client skeleton.</li>
+    <li style="margin-bottom:8px">Build Auth Service first — it is the gatekeeper. Nothing else works without it.</li>
+    <li style="margin-bottom:8px">In parallel: DevOps engineer sets up AWS infrastructure (VPC, RDS, ElastiCache, ECS cluster).</li>
+    <li style="margin-bottom:8px">Get DC Bank sandbox credentials and write the first successful API call (create a customer).</li>
+    <li>Follow the Week-by-Week plan in Section 25. Do not skip steps. Do not build Phase 2 until Phase 1 tests pass.</li>
+  </ol>
+</div>
+
+<p style="color:var(--t3);font-size:12px;margin-top:44px;border-top:1px solid var(--bd);padding-top:20px">
+  Trizzl Backend Architecture & Engineering Documentation v1.0 — March 2026<br>
+  Prepared for Sambifi / Trizzl Engineering Team · Confidential · Internal Use Only
+</p>
+
+</main>
+</body>
+</html>
